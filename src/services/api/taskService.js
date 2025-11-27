@@ -225,9 +225,8 @@ export const taskService = {
       }
       return false;
     } catch (error) {
-      console.error("Error deleting task:", error?.response?.data?.message || error);
+console.error("Error deleting task:", error?.response?.data?.message || error);
       return false;
-return false;
     }
   }
 };

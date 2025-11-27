@@ -168,8 +168,5 @@ const isCompleted = task.status_c === "completed"
   )
 }
 
-function cn(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
 
 export default TaskCard
