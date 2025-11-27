@@ -49,7 +49,7 @@ const TaskFlow = () => {
 
   const handleUpdateTask = async (id, updates) => {
     try {
-      const updatedTask = await taskService.update(id, updates)
+const updatedTask = await taskService.update(id, updates)
       setTasks(prev => prev.map(task => task.Id === id ? updatedTask : task))
       
       if (updates.status === "completed") {
@@ -81,28 +81,27 @@ const TaskFlow = () => {
 
     // Apply filter
     if (filter === "active") {
-      filtered = tasks.filter(task => task.status === "active")
+filtered = tasks.filter(task => task.status_c === "active")
     } else if (filter === "completed") {
-      filtered = tasks.filter(task => task.status === "completed")
+      filtered = tasks.filter(task => task.status_c === "completed")
     }
-
     // Apply sort
-    return filtered.sort((a, b) => {
+return filtered.sort((a, b) => {
       if (sortBy === "priority") {
         const priorityOrder = { high: 3, medium: 2, low: 1 }
-        return priorityOrder[b.priority] - priorityOrder[a.priority]
+        return priorityOrder[b.priority_c] - priorityOrder[a.priority_c]
       } else if (sortBy === "created") {
-        return new Date(b.createdAt) - new Date(a.createdAt)
+        return new Date(b.CreatedOn) - new Date(a.CreatedOn)
       }
       return 0
     })
   }
 
   const displayTasks = filteredAndSortedTasks()
-  const taskStats = {
+const taskStats = {
     total: tasks.length,
-    active: tasks.filter(t => t.status === "active").length,
-    completed: tasks.filter(t => t.status === "completed").length,
+    active: tasks.filter(t => t.status_c === "active").length,
+    completed: tasks.filter(t => t.status_c === "completed").length,
   }
 
   if (loading) {

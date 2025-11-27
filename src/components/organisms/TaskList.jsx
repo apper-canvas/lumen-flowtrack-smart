@@ -28,7 +28,7 @@ const TaskList = ({ tasks, onUpdateTask, onDeleteTask }) => {
             }}
             layout
           >
-            <TaskCard
+<TaskCard
               task={task}
               onUpdate={onUpdateTask}
               onDelete={onDeleteTask}
