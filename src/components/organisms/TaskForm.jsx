@@ -45,7 +45,7 @@ const handleSubmit = async (e) => {
           files = uploadedFiles || [];
         }
       }
-
+      console.log("files:",files)
       await onAddTask({
         title_c: title.trim(),
         description_c: description.trim(),
