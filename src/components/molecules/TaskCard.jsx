@@ -5,7 +5,6 @@ import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import Badge from "@/components/atoms/Badge";
 import { cn } from "@/utils/cn";
-
 const TaskCard = ({ task, onUpdate, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(task.title_c);
@@ -123,16 +122,25 @@ const isCompleted = task.status_c === "completed"
                     {task.description_c}
                   </p>
                 )}
+                
+                {/* File Attachments Display */}
+                {task.file_id_c && (
+                  <div className="mt-3 flex items-center space-x-2">
+                    <ApperIcon name="Paperclip" className="w-4 h-4 text-slate-400" />
+                    <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded-full">
+                      {typeof task.file_id_c === 'object' ? task.file_id_c.Name : 'File attached'}
+                    </span>
+                  </div>
+                )}
               </>
             )}
           </div>
         </div>
         
-<Badge variant={getPriorityColor(task.priority_c)}>
+        <Badge variant={getPriorityColor(task.priority_c)}>
           {task.priority_c}
         </Badge>
       </div>
-
       <div className="flex items-center justify-between pt-2 border-t border-slate-100">
         <div className="text-xs text-slate-500 space-y-1">
 <div>Created {format(new Date(task.CreatedOn), "MMM dd, yyyy")}</div>

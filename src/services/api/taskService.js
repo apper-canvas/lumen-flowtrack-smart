@@ -78,11 +78,29 @@ export const taskService = {
     }
   },
 
-  async create(taskData) {
+async create(taskData) {
     try {
       const apperClient = getApperClient();
       if (!apperClient) {
         throw new Error("ApperClient not initialized");
+      }
+
+      // First create file record if files are attached
+      let fileId = null;
+      if (taskData.files && taskData.files.length > 0) {
+        const { fileService } = await import('./fileService');
+        const firstFile = taskData.files[0];
+        
+        const fileRecord = await fileService.create({
+          file_name_c: firstFile.Name || firstFile.name,
+          file_type_c: firstFile.Type || firstFile.type,
+          file_size_c: firstFile.Size || firstFile.size,
+          files_c: taskData.files
+        });
+        
+        if (fileRecord) {
+          fileId = fileRecord.Id;
+        }
       }
 
       const params = {
@@ -92,7 +110,8 @@ export const taskService = {
           description_c: taskData.description_c || taskData.description,
           priority_c: taskData.priority_c || taskData.priority,
           status_c: taskData.status_c || taskData.status,
-          Tags: taskData.Tags || ""
+          Tags: taskData.Tags || "",
+          ...(fileId && { file_id_c: fileId })
         }]
       };
 
