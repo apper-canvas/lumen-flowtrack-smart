@@ -36,7 +36,8 @@ const TaskFlow = () => {
     loadTasks()
   }, [])
 
-const handleAddTask = async (taskData) => {
+  const handleAddTask = async (taskData) => {
+    console.log("taskData:", taskData)
     try {
       const newTask = await taskService.create(taskData)
       if (newTask) {
@@ -45,6 +46,7 @@ const handleAddTask = async (taskData) => {
       } else {
         toast.error("Failed to add task")
       }
+      return newTask
     } catch (err) {
       toast.error("Failed to add task")
       console.error("Error adding task:", err)
