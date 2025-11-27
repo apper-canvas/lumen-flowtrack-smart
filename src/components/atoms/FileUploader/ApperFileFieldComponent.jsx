@@ -11,6 +11,12 @@ const ApperFileFieldComponent = ({ config, elementId }) => {
   const elementIdRef = useRef(elementId);
   const existingFilesRef = useRef([]);
 
+  // Helper function to check if file is an image
+  const isImageFile = (fileName) => {
+    const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'tiff'];
+    const extension = fileName?.toLowerCase().split('.').pop();
+    return imageExtensions.includes(extension);
+  };
   // Update elementIdRef when elementId changes
   useEffect(() => {
     elementIdRef.current = elementId;
@@ -162,19 +168,26 @@ const ApperFileFieldComponent = ({ config, elementId }) => {
     );
   }
 
-  return (
+return (
     <div className="w-full">
       {/* Main container with unique ID */}
       <div 
         id={`file-uploader-${elementId}`}
-        className="min-h-[120px] border-2 border-dashed border-slate-200 rounded-lg bg-slate-50"
+        className="min-h-[140px] border-2 border-dashed border-slate-300 hover:border-primary-400 rounded-lg bg-gradient-to-br from-slate-50 to-slate-100 transition-colors duration-200"
       >
         {/* Loading UI */}
         {!isReady && (
-          <div className="flex items-center justify-center h-32">
+          <div className="flex flex-col items-center justify-center h-36 space-y-3">
+            <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
+              <ApperIcon name="Upload" className="w-5 h-5 text-primary-600" />
+            </div>
             <div className="flex items-center space-x-2 text-slate-500">
-              <div className="w-5 h-5 border-2 border-slate-300 border-t-slate-600 rounded-full animate-spin"></div>
-              <span className="text-sm">Loading file uploader...</span>
+              <div className="w-4 h-4 border-2 border-slate-300 border-t-primary-500 rounded-full animate-spin"></div>
+              <span className="text-sm font-medium">Loading file uploader...</span>
+            </div>
+            <div className="text-center">
+              <p className="text-xs text-slate-500">Supports all file types including images</p>
+              <p className="text-xs text-slate-400 mt-1">JPG, PNG, GIF, PDF, DOC, and more</p>
             </div>
           </div>
         )}

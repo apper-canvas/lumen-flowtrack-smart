@@ -69,7 +69,7 @@ export const fileService = {
     }
   },
 
-  // Create file record
+// Create file record
   async create(fileData) {
     try {
       const apperClient = getApperClient();
@@ -81,18 +81,35 @@ export const fileService = {
       const { ApperFileUploader } = window.ApperSDK;
       const convertedFiles = ApperFileUploader.toCreateFormat(fileData.files_c);
 
-      const params = {
-        records: [{
-          Name: fileData.file_name_c || fileData.name,
-          file_name_c: fileData.file_name_c,
-          file_type_c: fileData.file_type_c,
-          file_size_c: fileData.file_size_c,
-          upload_date_c: new Date().toISOString(),
-          files_c: convertedFiles,
-          Tags: fileData.Tags || ""
-        }]
+      // Helper function to check if file is an image
+      const isImageFile = (mimeType) => {
+        return mimeType && mimeType.startsWith('image/');
       };
 
+      // Extract metadata from the first file
+      const firstFile = fileData.files_c && fileData.files_c[0];
+      const fileName = fileData.file_name_c || firstFile?.Name || firstFile?.name;
+      const fileType = fileData.file_type_c || firstFile?.Type || firstFile?.type;
+      const fileSize = fileData.file_size_c || firstFile?.Size || firstFile?.size;
+
+      // Add image-specific tags if the file is an image
+      let tags = fileData.Tags || "";
+      if (isImageFile(fileType)) {
+        const imageTags = tags ? `${tags},image` : "image";
+        tags = imageTags;
+      }
+
+      const params = {
+        records: [{
+          Name: fileName,
+          file_name_c: fileName,
+          file_type_c: fileType,
+          file_size_c: fileSize,
+          upload_date_c: new Date().toISOString(),
+          files_c: convertedFiles,
+          Tags: tags
+        }]
+      };
       const response = await apperClient.createRecord('files_c', params);
       
       if (!response.success) {
